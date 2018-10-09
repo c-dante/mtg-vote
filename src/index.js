@@ -1,3 +1,6 @@
+// CSS, which should get injected as a style or extracted with min in prod
+import './index.css';
+
 import fp from 'lodash/fp';
 import { h, render, Component } from 'preact';
 
@@ -54,4 +57,3 @@ const App = ({ } = {}) => h('div', {}, [
 ]);
 
 render(h(App), document.body);
-
