@@ -11,6 +11,31 @@ const getCard = () => fetch('/api/cards/random', {
 
 const getCardT = () => new Promise((res, rej) => setTimeout(() => res(getCard()), 10));
 
+
+// @see https://scryfall.com/docs/api/cards
+const writeCard = card => {
+	switch (card.layout) {
+		case 'normal':
+			return [
+				...[
+					['name', 'mana_cost'],
+					['type_line'],
+					['oracle_text'],
+					['flavor_text'],
+				].map(row => h('div', { class: 'card--row' }, [
+					...row.filter(x => card[x]).map(txt => h('div', { class: txt }, card[txt]))
+				])),
+			];
+		default:
+			console.log('@todo: layout for', card);
+			return [
+				h('div', { class: 'name' }, card.name),
+				h('div', { class: 'oracle_text' }, card.oracle_text),
+			];
+	}
+}
+
+
 class Card extends Component {
 	constructor() {
 		super();
@@ -31,29 +56,36 @@ class Card extends Component {
 		)
 	}
 
-	render(_, { loading, card, error } = {}) {
+	render(_, {
+		loading = false,
+		card = {},
+		error,
+	} = {}) {
 		let time = new Date().toLocaleTimeString();
 
-		const children = [];
+		const children = (() => {
+			if (loading) {
+				return h('div', {}, 'loading');
+			}
 
-		if (loading) {
-			children.push('loading');
-		} else if (error) {
-			children.push('ERROR');
-		} else if (card) {
-			console.debug(card);
-			children.push(h('div', { id: card.id }, [
-				...['name', 'mana_cost', 'oracle_text'].map(txt => h('div', { class: txt }, card[txt])),
-			]));
-		}
+			if (error) {
+				return 'ERROR';
+			}
 
-		return h('div', {}, children);
+			if (card) {
+				return writeCard(card);
+			}
+		})();
+
+		return h('div', { class: 'card', id: card.id }, children);
 	}
 }
 
 const App = ({ } = {}) => h('div', {}, [
 	h('h3', {}, 'Some cards...'),
-	...(new Array(5).fill(undefined)).map(() => h(Card, {})),
+	h('div', { class: 'cards' }, [
+		...(new Array(5).fill(undefined)).map(() => h(Card, {})),
+	]),
 ]);
 
 render(h(App), document.body);

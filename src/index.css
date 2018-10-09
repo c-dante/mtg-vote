@@ -1,12 +1,49 @@
-.outer {
-	color: blue;
+.cards {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	margin: auto;
 }
 
-.outer .inner {
-	color: red;
+.card--row {
+	display: flex;
+	flex-direction: row;
+	padding: 2px 0 2px 0;
 }
 
+.card {
+	width: 250px;
+	margin: 2px;
+	padding: 2px;
+	display: flex;
+	flex-direction: column;
 
-.outer .sibling {
-	color: green;
+	background-color: #F0F0F0;
+	border-bottom: 2px solid black;
+	border-radius: 5px;
+}
+
+.card .name {
+	flex-grow: 1;
+	font-weight: bold;
+}
+
+.card .type_line {
+	color: lightslategray;
+}
+
+.card .oracle_text {
+}
+
+.card .mana_cost {
+	margin-left: 5px;
+}
+
+.card .flavor_text {
+	flex-grow: 1;
+
+	font-style: italic;
+	margin-top: 2px;
+	padding-top: 2px;
+	border-top: 0.5px solid lightslategray;
 }
