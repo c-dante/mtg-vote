@@ -127,7 +127,7 @@ module.exports = ({
 			proxy: {
 				'/api': {
 					changeOrigin: true,
-					target: 'https://api.example.com/',
+					target: 'https://api.scryfall.com/',
 					pathRewrite: {'^/api' : ''},
 					secure: false,
 				},
