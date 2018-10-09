@@ -59,6 +59,12 @@ const buildPlugins = [
 	}),
 ];
 const devPlugins = [
+	new webpack.SourceMapDevToolPlugin({
+		columns: false,
+		filename: '[file].map[query]',
+		lineToLine: false,
+		module: false,
+	}),
 	new webpack.HotModuleReplacementPlugin(),
 ];
 const prodPlugins = [];
@@ -74,13 +80,11 @@ module.exports = ({
 } = {}) => {
 	// configure plugins/etc
 	const mode = production ? 'production' : 'development';
+
 	const plugins = [
 		...buildPlugins,
 		...(production ? prodPlugins : devPlugins),
 	];
-	const devtool = production
-		? 'none'
-		: 'cheap-module-eval-source-map';
 
 	return {
 		mode,
@@ -118,7 +122,6 @@ module.exports = ({
 		},
 
 		// Development settings
-		devtool,
 		devServer: {
 			contentBase: './src',
 			hot: true,
