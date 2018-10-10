@@ -4,13 +4,16 @@ import './index.css';
 import fp from 'lodash/fp';
 import { h, render, Component } from 'preact';
 
+import { Stats } from './vote';
+
 const getCard = (base = API_PATH) => fetch(`${base}/cards/random`, {
 	method: 'get',
 }).then(res => res.text())
 	.then(x => JSON.parse(x));
 
-const getCardT = () => new Promise((res, rej) => setTimeout(() => res(getCard()), 10));
-
+const getCardT = () => new Promise(
+	(res, rej) => setTimeout(() => res(getCard()), 10)
+);
 
 // @see https://scryfall.com/docs/api/cards
 const writeCard = card => {
@@ -81,11 +84,17 @@ class Card extends Component {
 	}
 }
 
-const App = ({ } = {}) => h('div', {}, [
+const VoteCard = () => h('div', { class: 'vote-card' }, [
+	h(Card),
+	h(Stats),
+]);
+
+const App = ({} = {}) => h('div', {}, [
 	h('h3', {}, 'Some cards...'),
 	h('div', { class: 'cards' }, [
-		...(new Array(5).fill(undefined)).map(() => h(Card, {})),
+		...(new Array(1).fill(undefined)).map(() => h(VoteCard, {})),
 	]),
 ]);
 
 render(h(App), document.body);
+
