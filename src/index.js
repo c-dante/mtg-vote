@@ -4,7 +4,7 @@ import './index.css';
 import fp from 'lodash/fp';
 import { h, render, Component } from 'preact';
 
-const getCard = () => fetch('/api/cards/random', {
+const getCard = (base = API_PATH) => fetch(`${base}/cards/random`, {
 	method: 'get',
 }).then(res => res.text())
 	.then(x => JSON.parse(x));

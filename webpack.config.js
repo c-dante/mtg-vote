@@ -108,6 +108,13 @@ module.exports = ({
 	const plugins = [
 		...(production ? prodPlugins : devPlugins),
 		...buildPlugins,
+
+		// And our build defs...
+		new webpack.DefinePlugin({
+			API_PATH: JSON.stringify(
+				production ? 'https://api.scryfall.com' : 'api'
+			),
+		}),
 	];
 
 	const optimization = {
