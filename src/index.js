@@ -86,7 +86,16 @@ class Card extends Component {
 
 const VoteCard = () => h('div', { class: 'vote-card' }, [
 	h(Card),
-	h(Stats),
+	h(Stats, {
+		onChange(state) {
+			console.debug('!!!', state);
+		},
+	}),
+	h('button', {
+		onClick(e) {
+			console.debug('!', e);
+		},
+	}, 'Submit'),
 ]);
 
 const App = ({} = {}) => h('div', {}, [
