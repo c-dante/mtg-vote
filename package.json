@@ -1,7 +1,7 @@
 {
-  "name": "web",
+  "name": "mtg-vote",
   "version": "0.0.0",
-  "description": "Fresh start at a web base",
+  "description": "I enjoyed the mtgbracket.",
   "main": "none",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
