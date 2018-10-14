@@ -1,6 +1,6 @@
 {
   "name": "mtg-vote",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "I enjoyed the mtgbracket.",
   "main": "none",
   "scripts": {
@@ -19,8 +19,8 @@
   },
   "homepage": "https://github.com/c-dante/web#readme",
   "sideEffects": [
-		"**/*.css"
-	],
+    "**/*.css"
+  ],
   "dependencies": {
     "lodash": "^4.17.11",
     "preact": "^8.3.1"
