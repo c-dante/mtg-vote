@@ -25,7 +25,7 @@ const writeCard = card => {
 					['type_line'],
 					['oracle_text'],
 					['flavor_text'],
-				].map(row => h('div', { class: 'card--row' }, [
+				].map(row => h('div', { class: 'row' }, [
 					...row.filter(x => card[x]).map(txt => h('div', { class: txt }, card[txt]))
 				])),
 			];
@@ -85,13 +85,16 @@ class Card extends Component {
 }
 
 const VoteCard = () => h('div', { class: 'vote-card' }, [
-	h(Card),
-	h(Stats, {
-		onChange(state) {
-			console.debug('!!!', state);
-		},
-	}),
+	h('div', { class: 'row' }, [
+		h(Card),
+		h(Stats, {
+			onChange(state) {
+				console.debug('!!!', state);
+			},
+		}),
+	]),
 	h('button', {
+		class: 'submit-vote',
 		onClick(e) {
 			console.debug('!', e);
 		},
@@ -99,7 +102,7 @@ const VoteCard = () => h('div', { class: 'vote-card' }, [
 ]);
 
 const App = ({} = {}) => h('div', {}, [
-	h('h3', {}, 'Some cards...'),
+	h('h3', {}, 'mtg-vote'),
 	h('div', { class: 'cards' }, [
 		...(new Array(1).fill(undefined)).map(() => h(VoteCard, {})),
 	]),

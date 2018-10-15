@@ -32,17 +32,19 @@ export class Stat extends Component {
 	} = {}, state) {
 		return h('div', { class: 'form-field' }, [
 			h('label', { for: state.id }, name),
-			h('input', {
-				value: state.value,
-				type: 'range',
-				id: state.id,
-				name,
-				min: 0,
-				max: 100,
-				// @todo: https://github.com/developit/linkstate
-				onChange: e => this.onChange(e),
-			}),
-			opt(!state.pristine, h('span', { class: 'form-value' }, state.value)),
+			h('div', { class: 'form-input' }, [
+				h('input', {
+					value: state.value,
+					type: 'range',
+					id: state.id,
+					name,
+					min: 0,
+					max: 100,
+					// @todo: https://github.com/developit/linkstate
+					onChange: e => this.onChange(e),
+				}),
+				opt(!state.pristine, h('span', { class: 'form-value' }, state.value)),
+			]),
 		])
 	}
 }

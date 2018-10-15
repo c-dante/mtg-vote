@@ -141,20 +141,13 @@ module.exports = ({
 				// styles
 				{
 					test: /\.css$/,
+					exclude: /node_modules/,
 					use: [
 						production ? MiniCssExtractPlugin.loader : 'style-loader',
 						{ loader: 'css-loader', options: { importLoaders: 1 } },
 						'postcss-loader',
 					],
 				},
-//				{
-//					test: /\.scss$/,
-//					use: [
-//						production ? MiniCssExtractPlugin.loader : 'style-loader',
-//						'css-loader',
-//						'sass-loader',
-//					],
-//				},
 				// js / babel
 				{
 					test: /\.m?js$/,
