@@ -65,6 +65,10 @@ const buildPlugins = [
 		title: 'mtg-vote',
 		chunksSortMode: 'dependency',
 		excludeChunks: [],
+		meta: {
+			'viewport': 'width=device-width, initial-scale=1',
+			'mobile-web-app-capable': 'yes',
+		},
 	}),
 	new ScriptExtHtmlWebpackPlugin({
 		sync: [
@@ -133,7 +137,7 @@ module.exports = ({
 			rules: [
 				// templates
 				{
-					test: /\.tpl\.pug$/,
+					test: /\.pug$/,
 					use: [
 						'pug-loader'
 					],
