@@ -165,6 +165,12 @@ module.exports = ({
 				},
 			],
 		},
+		resolve: {
+			alias: {
+				react: 'preact/compat',
+				'react-dom': 'preact/compat',
+			}
+		},
 		output: {
 			filename: production ? '[name].[contenthash].bundle.js' : '[name].bundle.js',
 			path: path.resolve(__dirname, 'dist'),

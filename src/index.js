@@ -101,12 +101,26 @@ const VoteCard = () => h('div', { class: 'vote-card' }, [
 	}, 'Submit'),
 ]);
 
-const App = ({} = {}) => h('div', {}, [
-	h('h3', {}, 'mtg-vote'),
-	h('div', { class: 'cards' }, [
-		...(new Array(1).fill(undefined)).map(() => h(VoteCard, {})),
+import {
+	AppBar,
+	Typography,
+	Toolbar,
+	IconButton,
+} from '@material-ui/core';
+import { Menu as MenuIcon } from '@material-ui/icons';
+
+const App = () => h(AppBar, { position: 'static' }, [
+	h(Toolbar, {}, [
+		h(IconButton , { edge: 'start' }, [ h(MenuIcon) ]),
+		h(Typography , { variant: 'h6' }, 'mtg-vote'),
 	]),
 ]);
 
-render(h(App), document.body);
+// ({} = {}) => h('div', {}, [
+// 	h('h3', {}, 'mtg-vote'),
+// 	h('div', { class: 'cards' }, [
+// 		...(new Array(1).fill(undefined)).map(() => h(VoteCard, {})),
+// 	]),
+// ]);
 
+render(h(App), document.body);
