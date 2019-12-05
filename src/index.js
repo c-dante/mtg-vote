@@ -103,16 +103,22 @@ const VoteCard = () => h('div', { class: 'vote-card' }, [
 
 import {
 	AppBar,
+	Container,
 	Typography,
 	Toolbar,
 	IconButton,
 } from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons';
 
-const App = () => h(AppBar, { position: 'static' }, [
-	h(Toolbar, {}, [
-		h(IconButton , { edge: 'start' }, [ h(MenuIcon) ]),
-		h(Typography , { variant: 'h6' }, 'mtg-vote'),
+const App = () => h('div', {}, [
+	h(AppBar, { position: 'static' }, [
+		h(Toolbar, {}, [
+			h(IconButton , { edge: 'start' }, [ h(MenuIcon) ]),
+			h(Typography , { variant: 'h6' }, 'mtg-vote'),
+		]),
+	]),
+	h(Container, { class: 'cards' }, [
+		h(VoteCard, {}),
 	]),
 ]);
 
