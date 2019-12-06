@@ -1,6 +1,4 @@
-# web
-Fresh start at a web base
+# mtg-vote
+I like to review/rank magic cards.
 
-# features
-* webpack v4 script to build assets.
-
+I figured you might, too.

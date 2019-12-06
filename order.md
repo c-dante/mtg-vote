@@ -8,6 +8,3 @@ Given a random seed
 3. Can count number of cards
 4. Use a uniform space filling [random number
 	 generator](https://www.isid.ac.in/~deepayan/ICP2017/projects/Debraj_Bose/report.pdf)
-
-
-Then, save stuff with [dexie](https://github.com/dfahlander/Dexie.js/).

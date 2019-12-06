@@ -1,34 +1,65 @@
 // CSS, which should get injected as a style or extracted with min in prod
 import './index.css';
 
-import fp from 'lodash/fp';
-import { h, render, Component } from 'preact';
+import { h, render } from 'preact';
+import {
+	AppBar,
+	Box,
+	Grid,
+	Container,
+	Typography,
+	Toolbar,
+	IconButton,
+} from '@material-ui/core';
+import { Menu as MenuIcon } from '@material-ui/icons';
+import { memo, useMemo, useCallback } from 'react';
+
+import { AsyncLoader } from './asyncLoader';
 
 import { Stats } from './vote';
+import { getCard } from './api';
 
-const getCard = (base = API_PATH) => fetch(`${base}/cards/random`, {
-	method: 'get',
-}).then(res => res.text())
-	.then(x => JSON.parse(x));
+const NormalCard = memo(({ card }) => {
+	return h(Box, { display: 'flex', flexDirection: 'column', maxWidth: '400px' }, [
+		// Header line
+		h(Box, { display: 'flex', justifyContent: 'space-between', mb: 2 }, [
+			h(Box, { mr: 5 }, [
+				h(Typography, { variant: 'subtitle1' }, card.name)
+			]),
+			h(Typography, { variant: 'subtitle1' }, card.mana_cost),
+		]),
+		// Type Line
+		h(Box, { mb: 2 }, [
+			h(Typography, { variant: 'subtitle2' }, card.type_line),
+		]),
+		// Oracle
+		h(Box, { mb: 2 }, [
+			h(Typography, { variant: 'body1' }, card.oracle_text),
+		]),
+		// Flavor
+		h(Box, { mb: 2 }, [
+			h(Typography, { variant: 'caption' }, card.flavor_text),
+		]),
+	])
+});
 
-const getCardT = () => new Promise(
-	(res, rej) => setTimeout(() => res(getCard()), 10)
-);
+const SplitCard = memo(({ card }) => {
+	return h(Box, { display: 'flex', flexDirection: 'column' }, [
+		h(Typography, { variant: 'h6', }, card.name),
+		h(Box, { display: 'flex' }, [
+			h(NormalCard, { card: card.card_faces[0] }),
+			h(NormalCard, { card: card.card_faces[1] }),
+		]),
+	]);
+});
 
 // @see https://scryfall.com/docs/api/cards
 const writeCard = card => {
 	switch (card.layout) {
 		case 'normal':
-			return [
-				...[
-					['name', 'mana_cost'],
-					['type_line'],
-					['oracle_text'],
-					['flavor_text'],
-				].map(row => h('div', { class: 'row' }, [
-					...row.filter(x => card[x]).map(txt => h('div', { class: txt }, card[txt]))
-				])),
-			];
+			return h(NormalCard, { card });
+		case 'split':
+			return h(SplitCard, { card });
 		default:
 			console.log('@todo: layout for', card);
 			return [
@@ -36,97 +67,75 @@ const writeCard = card => {
 				h('div', { class: 'oracle_text' }, card.oracle_text),
 			];
 	}
-}
+};
+
+const VoteUi = memo(({ onVote }) => {
+	return 'Vote Here';
+});
+
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+const VoteCard = memo(({ card, onVote }) => {
+	const matches = useMediaQuery(theme => theme.breakpoints.up('lg'));
+
+	return h(Grid, { container: true, spacing: 2 }, [
+		// https://scryfall.com/docs/api/images
+		h(Grid, { item: true, xs: 12, md: 8, lg: 5 }, [
+			h('img', { src: card.image_uris.normal })
+		]),
+		matches && h(Grid, { item: true, lg: 4 }, [
+			writeCard(card),
+		]),
+		h(Grid, { item: true, xs: 12, md: 4, lg: 3 }, [
+			h(VoteUi, { onVote }),
+		]),
+	]);
+});
 
 
-class Card extends Component {
-	constructor() {
-		super();
 
-		this.setState({
-			loading: true,
-		});
+/*************************
+ * VoteFlow
+ *
+ * Handles db interaction and loading cards
+ */
+const VoteFlow = () => {
+	const cardPromise = useMemo(() => getCard(), []);
 
-		getCardT().then(
-			card => this.setState({
-				loading: false,
-				card,
-			}),
-			error => this.setState({
-				loading: false,
-				error,
-			}),
-		)
-	}
+	const onVote = useCallback((results) => {
+		console.debug('Record vote', { results });
+	}, []);
 
-	render(_, {
-		loading = false,
-		card = {},
-		error,
-	} = {}) {
-		let time = new Date().toLocaleTimeString();
+	return h(AsyncLoader, { promise: cardPromise }, card => {
+		console.debug(card);
+		return h(VoteCard, { card, onVote });
+	});
+};
 
-		const children = (() => {
-			if (loading) {
-				return h('div', {}, 'loading');
-			}
 
-			if (error) {
-				return 'ERROR';
-			}
 
-			if (card) {
-				return writeCard(card);
-			}
-		})();
 
-		return h('div', { class: 'card', id: card.id }, children);
-	}
-}
-
-const VoteCard = () => h('div', { class: 'vote-card' }, [
-	h('div', { class: 'row' }, [
-		h(Card),
-		h(Stats, {
-			onChange(state) {
-				console.debug('!!!', state);
-			},
-		}),
-	]),
-	h('button', {
-		class: 'submit-vote',
-		onClick(e) {
-			console.debug('!', e);
-		},
-	}, 'Submit'),
-]);
-
-import {
-	AppBar,
-	Container,
-	Typography,
-	Toolbar,
-	IconButton,
-} from '@material-ui/core';
-import { Menu as MenuIcon } from '@material-ui/icons';
-
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+const theme = createMuiTheme({
+	// @todo: theme overrides
+});
+/*************************
+ * App
+ *
+ * In charge of rendering the outer shell / navigation
+ */
 const App = () => h('div', {}, [
-	h(AppBar, { position: 'static' }, [
-		h(Toolbar, {}, [
-			h(IconButton , { edge: 'start' }, [ h(MenuIcon) ]),
-			h(Typography , { variant: 'h6' }, 'mtg-vote'),
+	h(ThemeProvider, { theme }, [
+		h(AppBar, { position: 'static' }, [
+			h(Toolbar, {}, [
+				h(IconButton , { edge: 'start' }, [ h(MenuIcon) ]),
+				h(Typography , { variant: 'h6' }, 'mtg-vote'),
+			]),
+		]),
+		h(Container, { display: 'flex' }, [
+			h(VoteFlow, {}),
 		]),
 	]),
-	h(Container, { class: 'cards' }, [
-		h(VoteCard, {}),
-	]),
 ]);
 
-// ({} = {}) => h('div', {}, [
-// 	h('h3', {}, 'mtg-vote'),
-// 	h('div', { class: 'cards' }, [
-// 		...(new Array(1).fill(undefined)).map(() => h(VoteCard, {})),
-// 	]),
-// ]);
-
+// Kick it off
 render(h(App), document.body);
