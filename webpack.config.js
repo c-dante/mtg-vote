@@ -122,6 +122,11 @@ module.exports = ({
 	const mode = production ? 'production' : 'development';
 
 	const plugins = [
+		new webpack.DefinePlugin({
+			API_PATH: JSON.stringify(
+				production ? 'https://api.scryfall.com' : 'api'
+			),
+		}),
 		...(production ? prodPlugins : devPlugins),
 		...basePlugins,
 	];
@@ -165,7 +170,7 @@ module.exports = ({
 			proxy: {
 				'/api': {
 					changeOrigin: true,
-					target: 'https://api.example.com/',
+					target: 'https://api.scryfall.com/',
 					pathRewrite: {'^/api' : ''},
 					secure: false,
 				},
