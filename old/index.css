@@ -1,0 +1,76 @@
+.row {
+	display: flex;
+	flex-direction: row;
+}
+
+.form-field {
+	display: flex;
+	flex-direction: column;
+
+	label {
+		font-size: 0.8em;
+	}
+
+	.form-input {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+}
+
+.vote-card {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+
+/* Card */
+.cards {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	margin: auto;
+}
+
+.card {
+	flex-grow: 1;
+	margin: 2px;
+	padding: 2px;
+	display: flex;
+	flex-direction: column;
+
+	background-color: #F0F0F0;
+	border-bottom: 2px solid black;
+	border-radius: 5px;
+
+	.name {
+		flex-grow: 1;
+		font-weight: bold;
+	}
+
+	.type_line {
+		color: lightslategray;
+	}
+
+	.oracle_text {
+	}
+
+	.mana_cost {
+		margin-left: 5px;
+	}
+
+	.flavor_text {
+		flex-grow: 1;
+
+		font-style: italic;
+		margin-top: 2px;
+		padding-top: 2px;
+		border-top: 0.5px solid lightslategray;
+	}
+}
+
+/* stats / voting */
+.stat {
+	min-width: 10em;
+}
+
